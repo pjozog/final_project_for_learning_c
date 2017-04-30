@@ -1,1 +1,1 @@
-add_subdirectory(sodoku_board)
+add_subdirectory(sudoku_board)

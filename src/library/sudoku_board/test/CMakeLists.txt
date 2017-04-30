@@ -1,0 +1,4 @@
+add_executable(sudoku_board_test sudoku_board_test.c)
+target_link_libraries(sudoku_board_test sudoku_board_lib)
+
+add_test(sudoku_board_test sudoku_board_test)
