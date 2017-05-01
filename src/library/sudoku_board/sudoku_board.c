@@ -18,11 +18,6 @@ struct sudoku_board_region {
 sudoku_board_t* sudoku_board_create() {
   sudoku_board_t* sb = calloc(1, sizeof *sb);
   sb->data = calloc(SIZE * SIZE, sizeof *sb->data);
-
-  for (int i = 0; i < SIZE * SIZE; ++i) {
-    sb->data[i] = SUDOKU_BOARD_UNKNOWN;
-  }
-
   return sb;
 }
 
@@ -40,7 +35,7 @@ int sudoku_board_get(const sudoku_board_t* sb, int row, int col) {
 void sudoku_board_set(sudoku_board_t* sb, int row, int col, int value) {
   assert(row >= 0 && row < SIZE);
   assert(col >= 0 && col < SIZE);
-  assert(value > 0 && value <= SIZE);
+  assert(value == SUDOKU_BOARD_UNKNOWN || (value >= 1 && value <= SIZE));
   sb->data[row * SIZE + col] = value;
 }
 

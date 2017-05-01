@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #define SUDOKU_BOARD_NUM_DIGITS 9
-#define SUDOKU_BOARD_UNKNOWN -1
+#define SUDOKU_BOARD_UNKNOWN 0
 
 typedef struct sudoku_board sudoku_board_t;
 typedef struct sudoku_board_region sudoku_board_region_t;
@@ -43,7 +43,7 @@ void sudoku_board_destroy(sudoku_board_t* sb);
 /**
  * Get the current entry of the board at the provided row and column
  *
- * 'row' and 'col' must both be in [0, 8]
+ * 'row' and 'col' must both be one of [0, 1, ..., 8]
  */
 int sudoku_board_get(const sudoku_board_t* sb, int row, int col);
 
@@ -52,7 +52,7 @@ int sudoku_board_get(const sudoku_board_t* sb, int row, int col);
  *
  * 'row' and 'col' must both be one of [0, 1, ..., 8]
  *
- * 'value' must be one of [1, 2, ..., 9]
+ * 'value' must be one of [SUDOKU_BOARD_UNKNOWN, 1, 2, ..., 9]
  */
 void sudoku_board_set(sudoku_board_t* sb, int row, int col, int value);
 
