@@ -17,7 +17,7 @@ typedef enum sudoku_board_region_type {
 
 /**
  * Create a new sudoku_board_t; all values are initialized to
- * SUDOKU_BOARD_UNKNOWN
+ * SUDOKU_BOARD_UNKNOWN. The board row/column convention is as follows:
  *
  *                    _ _ _ _ _ _ _ _ _
  *                    _ _ _ _ _ _ _ _ _
@@ -32,8 +32,16 @@ typedef enum sudoku_board_region_type {
  *                        ^
  *                        |
  *                         - This is column 2
+ *
+ * The returned sudoku board must be destroyed with sudoku_board_destroy().
  */
 sudoku_board_t* sudoku_board_create();
+
+/**
+ * Make a copy of 'that'. The returned sudoku board must be destroyed with
+ * sudoku_board_destroy().
+ */
+sudoku_board_t* sudoku_board_copy(const sudoku_board_t* that);
 
 /**
  * Destroy the sudoku_board_t
@@ -65,6 +73,16 @@ void sudoku_board_print(const sudoku_board_t* sb);
  * Print the sudoku board to the file handle provided by 'fp'
  */
 void sudoku_board_fprint(const sudoku_board_t* sb, FILE* fp);
+
+/**
+ * Returns 1 if sb_a == sb_b, 0 otherwise
+ */
+int sudo_board_equals(const sudoku_board_t* sb_a, const sudoku_board_t* sb_b);
+
+/**
+ * Read the sudoku board from the file handle provided by 'fp'
+ */
+sudoku_board_t* sudoku_board_fread(FILE* fp);
 
 /**
  * Create a sudoku board region.

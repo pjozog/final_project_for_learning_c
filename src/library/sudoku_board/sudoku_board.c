@@ -1,8 +1,10 @@
 #include "library/sudoku_board/sudoku_board.h"
 
 #include <assert.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SIZE SUDOKU_BOARD_NUM_DIGITS
 
@@ -18,6 +20,12 @@ struct sudoku_board_region {
 sudoku_board_t* sudoku_board_create() {
   sudoku_board_t* sb = calloc(1, sizeof *sb);
   sb->data = calloc(SIZE * SIZE, sizeof *sb->data);
+  return sb;
+}
+
+sudoku_board_t* sudoku_board_copy(const sudoku_board_t* that) {
+  sudoku_board_t* sb = sudoku_board_create();
+  sb->data = memcpy(sb->data, that->data, SIZE * SIZE * sizeof (*sb->data));
   return sb;
 }
 
@@ -55,6 +63,39 @@ void sudoku_board_fprint(const sudoku_board_t* sb, FILE* fp) {
     fprintf(fp, "\n");
   }
   fprintf(fp, "\n");
+}
+
+sudoku_board_t* sudoku_board_fread(FILE* fp) {
+  sudoku_board_t* sb = sudoku_board_create();
+  int c = 0;
+  int i = 0;
+  int row = 0;
+  int col = 0;
+  while ((c = fgetc(fp)) != EOF) {
+    if (isdigit(c)) {
+      row = i / SIZE;
+      col = i % SIZE;
+      sudoku_board_set(sb, row, col, c - '0');
+      ++i;
+    } else if (c == '_') {
+      row = i / SIZE;
+      col = i % SIZE;
+      sudoku_board_set(sb, row, col, SUDOKU_BOARD_UNKNOWN);
+      ++i;
+    }
+  }
+  return sb;
+}
+
+int sudo_board_equals(const sudoku_board_t* sb_a, const sudoku_board_t* sb_b) {
+  for (int i = 0; i < SIZE; ++i) {
+    for (int j = 0; j < SIZE; ++j) {
+      if (sudoku_board_get(sb_a, i, j) != sudoku_board_get(sb_b, i, j)) {
+        return 0;
+      }
+    }
+  }
+  return 1;
 }
 
 sudoku_board_region_t* sudoku_board_region_create(
